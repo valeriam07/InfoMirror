@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espejo Inteligente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Control del Espejo Inteligente</h1>
+
+        <div class="button-container">
+            <!-- Botones para controlar el espejo, sin redirigir la pagina -->
+            <button onclick="sendCommand('/turn_on_leds')">Encender LEDs</button>
+            <button onclick="sendCommand('/turn_off_leds')">Apagar LEDs</button>
+            <button onclick="sendCommand('/turn_on_screen')">Encender Pantalla</button>
+            <button onclick="sendCommand('/turn_off_screen')">Apagar Pantalla</button>
+        </div>
+
+        <div class="slider-container">
+            <label for="brightness">Ajustar Brillo:</label>
+            <input type="range" id="brightness" name="brightness" min="0" max="100" value="50" step="1" onchange="updateBrightnessValue(this.value)">
+            <span id="brightness-value">50</span>%
+        </div>
+    </div>
+
+    <script>
+        // Funcion para enviar comandos al servidor sin recargar la pagina
+        function sendCommand(command) {
+            fetch(command, {
+                method: 'GET'
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Ver en la consola lo que devuelve el servidor
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Funcion para actualizar el valor del brillo
+        function updateBrightnessValue(value) {
+            document.getElementById('brightness-value').textContent = value;
+
+            fetch('/adjust_brightness/' + value, {
+                method: 'GET'
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Mostrar la respuesta en la consola
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
+
