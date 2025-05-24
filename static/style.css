@@ -3,11 +3,11 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     margin: 0;
-    padding: 0;
+    padding: 40px 0; /* Agrega espacio arriba y abajo */
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    overflow-y: auto; /* Permite scroll si es necesario */
 }
 
 .container {
@@ -30,7 +30,7 @@ h1 {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #5DC1BE;
     border: none;
     color: white;
     padding: 10px 20px;
@@ -38,14 +38,14 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 10px;
+    margin: 6px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #52ABA0;
 }
 
 .slider-container {
@@ -61,3 +61,27 @@ input[type="range"] {
     font-weight: bold;
     color: #333;
 }
+
+/* Agrupacion de botones */
+.button-group {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-group:last-of-type {
+    border-bottom: none;
+    align-items: center;
+}
+
+/* Emoji + texto */
+button {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* espacio entre emoji y texto */
+    justify-content: center;
+}
+

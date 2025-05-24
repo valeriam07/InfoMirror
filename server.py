@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -25,6 +26,21 @@ def turn_on_screen():
 def turn_off_screen():
     print("Pantalla apagada.")
     return "Pantalla apagada."
+    
+@app.route("/show_time")
+def show_time():
+    print("Mostrar hora")
+    return "Mostrar hora"
+    
+@app.route("/show_calendar")
+def show_calendar():
+    print("Mostrar calendario")
+    return "Mostrar calendario"
+    
+@app.route("/show_climate")
+def show_climate():
+    print("Mostrar clima")
+    return "Mostrar clima"
 
 @app.route("/adjust_brightness/<int:value>")
 def adjust_brightness(value):

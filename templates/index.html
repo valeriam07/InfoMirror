@@ -8,22 +8,34 @@
 </head>
 <body>
     <div class="container">
-        <h1>Control del Espejo Inteligente</h1>
+        <h1>Control InfoMirror &#129694;&#10024;</h1>
 
-        <div class="button-container">
-            <!-- Botones para controlar el espejo, sin redirigir la pagina -->
+        <!-- Grupo: Pantalla -->
+        <div class="button-group">
+            <button onclick="sendCommand('/turn_on_screen')">&#128994; Encender Pantalla</button>
+            <button onclick="sendCommand('/turn_off_screen')">&#128308; Apagar Pantalla</button>
+        </div>
+
+        <!-- Grupo: Informacion -->
+        <div class="button-group">
+            <button onclick="sendCommand('/show_time')">&#128338; Ver hora</button>
+            <button onclick="sendCommand('/show_calendar')">&#128197; Ver calendario</button>
+            <button onclick="sendCommand('/show_climate')">&#9729; Ver clima</button>
+        </div>
+        
+        <!-- Grupo: LEDs y brillo -->
+        <div class="button-group">
             <button onclick="sendCommand('/turn_on_leds')">Encender LEDs</button>
             <button onclick="sendCommand('/turn_off_leds')">Apagar LEDs</button>
-            <button onclick="sendCommand('/turn_on_screen')">Encender Pantalla</button>
-            <button onclick="sendCommand('/turn_off_screen')">Apagar Pantalla</button>
-        </div>
-
-        <div class="slider-container">
-            <label for="brightness">Ajustar Brillo:</label>
-            <input type="range" id="brightness" name="brightness" min="0" max="100" value="50" step="1" onchange="updateBrightnessValue(this.value)">
-            <span id="brightness-value">50</span>%
+            <div class="slider-container">
+                <label for="brightness">Ajustar Brillo:</label>
+                <input type="range" id="brightness" name="brightness" min="0" max="100" value="50" step="1" onchange="updateBrightnessValue(this.value)">
+                <span id="brightness-value">50</span>%
+            </div>
         </div>
     </div>
+
+
 
     <script>
         // Funcion para enviar comandos al servidor sin recargar la pagina
