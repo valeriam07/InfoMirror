@@ -27,7 +27,7 @@ class Display:
         self.running = False
 
     def turnOn(self):
-        if self.root is None:
+        if not self.running:  # evitar multiples hilos
             self.running = True
             threading.Thread(target=self._start_gui, daemon=True).start()
 
@@ -35,17 +35,21 @@ class Display:
         self.root = tk.Tk()
         self.root.title("InfoMirror")
         self.root.geometry("400x300")
+
         self.label = tk.Label(self.root, text="Bienvenid@ a InfoMirror", font=("Arial", 16))
         self.label.pack(expand=True)
+
         self.root.protocol("WM_DELETE_WINDOW", self.turnOff)
         self.root.mainloop()
 
+        # Al cerrar el mainloop, limpiar estado
+        self.running = False
+        self.root = None
+        self.label = None
+
     def turnOff(self):
         if self.root:
-            self.running = False
-            self.root.destroy()
-            self.root = None
-            self.label = None
+            self.root.destroy()  # Rompe el mainloop y continua _start_gui()
 
     def _update_label(self, text):
         if self.label and self.root:
