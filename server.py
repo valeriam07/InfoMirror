@@ -1,21 +1,23 @@
 from flask import Flask, render_template
 from components import InfoMirror, Display
+import threading
 
 app = Flask(__name__)
 mirror = InfoMirror.InfoMirror()
 
 @app.route("/")
 def home():
+    threading.Thread(target=mirror.start_motion_sensor, daemon=True).start() # Iniciar deteccion de movimiento en paralelo
     return render_template("index.html")
 
 @app.route("/turn_on_leds")
 def turn_on_leds():
-    print("LEDs encendidos.")
+    mirror.manage_leds_request(1, 100)
     return "LEDs encendidos."
 
 @app.route("/turn_off_leds")
 def turn_off_leds():
-    print("LEDs apagados.")
+    mirror.manage_leds_request(2, 0)
     return "LEDs apagados."
 
 @app.route("/turn_on_screen")
@@ -50,6 +52,7 @@ def show_climate():
 
 @app.route("/adjust_brightness/<int:value>")
 def adjust_brightness(value):
+    mirror.manage_leds_request(3, value)
     print(f"Ajustando brillo al {value}%.")
     return f"Brillo ajustado al {value}%."
 

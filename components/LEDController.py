@@ -12,8 +12,9 @@
 
 
 class LEDController():
-	def __init__(self, leds):
-		self.leds = leds
+	def __init__(self, parent):
+		self.parent = parent
+		self.leds = 0
 		
 	def turnOn(self):
 		print("[LEDS] Encender luces")

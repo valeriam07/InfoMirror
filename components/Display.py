@@ -21,7 +21,8 @@ import time
 import threading
 
 class Display:
-    def __init__(self):
+    def __init__(self, parent):
+        self.parent = parent
         self.root = None
         self.label = None
         self.running = False
@@ -30,6 +31,7 @@ class Display:
         if not self.running:  # evitar multiples hilos
             self.running = True
             threading.Thread(target=self._start_gui, daemon=True).start()
+            print("[DISPLAY] Encendiendo Display")
 
     def _start_gui(self):
         self.root = tk.Tk()
@@ -50,7 +52,8 @@ class Display:
     def turnOff(self):
         if self.root:
             self.root.destroy()  # Rompe el mainloop y continua _start_gui()
-
+        print("[DISPLAY] Apagando Display")
+        
     def _update_label(self, text):
         if self.label and self.root:
             self.root.after(0, lambda: self.label.config(text=text))
@@ -72,14 +75,17 @@ class Display:
     def showWeather(self):
         weather_info = self.get_weather()
         self._update_label(weather_info)
+        print("[DISPLAY] Mostrando el clima")
 
     def showTime(self):
         now = datetime.datetime.now()
         time_info = now.strftime("Hora: %H:%M\nFecha: %A, %d de %B de %Y")
         self._update_label(time_info)
+        print("[DISPLAY] Mostrando hora y fecha")
 
     def showCalendar(self):
         now = datetime.datetime.now()
         cal = calendar.TextCalendar()
         month_cal = cal.formatmonth(now.year, now.month)
         self._update_label(month_cal)
+        print("[DISPLAY] Mostrando el calendario")
