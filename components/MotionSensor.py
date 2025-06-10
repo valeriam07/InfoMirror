@@ -32,10 +32,12 @@ class MotionSensor:
                         #print("Movimiento detectado!")
                         #self.led_line.set_value(1)
                         self.parent.led_controller.turnOn()
+                        self.parent.display.turnOn()
                         time.sleep(10) # Esperar 10s antes de leer otra vez
                 else:
                     #self.led_line.set_value(0)
                     self.parent.led_controller.turnOff()
+                    self.parent.display.turnOff()
                     #print("Sin movimiento, apagando")
                 time.sleep(0.1) 
         except KeyboardInterrupt:

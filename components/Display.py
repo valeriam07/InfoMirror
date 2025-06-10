@@ -22,36 +22,41 @@ class Display:
     BACKGROUND_COLOR = "#2c2c2c"  # gris oscuro
     TEXT_COLOR = "#ffffff"        # blanco
     FONT_FAMILY = "Arial"
-    FONT_NORMAL = (FONT_FAMILY, 18)
+    FONT_NORMAL = (FONT_FAMILY, 23)
     
     def __init__(self, parent):
         self.parent = parent
         self.root = None
         self.label = None
         self.running = False
+        self.encendido = False
 
     def turnOn(self):
+        self.encendido = True
         if not self.running:
             self.running = True
             threading.Thread(target=self._start_gui, daemon=True).start()
-            print("[DISPLAY] Encendiendo Display")
+        text="Bienvenid@ a InfoMirror \U0001FA9E\u2728"
+        self._update_label(text)
+        print("[DISPLAY] Encendiendo Display")
 
     def _start_gui(self):
         self.root = tk.Tk()
         self.root.title("InfoMirror")
-        self.root.geometry("1600x1200")
+        self.root.geometry("2000x1200")
         self.root.configure(bg=self.BACKGROUND_COLOR)
 
         self.label = tk.Label(
             self.root,
             text="Bienvenid@ a InfoMirror \U0001FA9E\u2728",
-            font=(self.FONT_NORMAL, 40),
+            font=(self.FONT_NORMAL),
             fg=self.TEXT_COLOR,
             bg=self.BACKGROUND_COLOR,
             justify="left",
-            anchor="w"
+            anchor="w",
+            padx=70
         )
-        self.label.pack(expand=True, fill="both", padx=50, pady=50)
+        self.label.pack(expand=True, fill="both", padx=70, pady=50)
 
         self.root.protocol("WM_DELETE_WINDOW", self.turnOff)
         self.root.mainloop()
@@ -61,15 +66,15 @@ class Display:
         self.label = None
 
     def turnOff(self):
-        if self.root:
-            self.root.destroy()
+        self._update_label("")
+        self.encendido = False
         print("[DISPLAY] Apagando Display")
 
     def _update_label(self, text):
         if self.label and self.root:
             self.root.after(0, lambda: self.label.config(text=text))
         else:
-            print("Pantalla apagada. Enciende primero con `turnOn()`.")
+            print("[WARNING] Pantalla apagada. Enciende primero con `turnOn()`.")
 
     def get_weather(self):
         url = "https://api.open-meteo.com/v1/forecast?latitude=-34.61&longitude=-58.38&current_weather=true"
@@ -84,20 +89,39 @@ class Display:
             return f"Error: {e}"
 
     def showWeather(self):
-        weather_info = self.get_weather()
-        self._update_label(weather_info)
-        print("[DISPLAY] Mostrando el clima")
+        if(self.encendido):
+                weather_info = self.get_weather()
+                if self.label and self.root:
+                        self.label.config(
+                            text=weather_info,
+                            font=self.FONT_NORMAL  
+                        )
+                self._update_label(weather_info)
+                
+                print("[DISPLAY] Mostrando el clima")
 
     def showTime(self):
-        now = datetime.datetime.now()
-        time_info = now.strftime("\U0001F552 Hora: %H:%M\nFecha: %A, %d de %B de %Y")
-        self._update_label(time_info)
-        print("[DISPLAY] Mostrando hora y fecha")
+        if(self.encendido):
+                now = datetime.datetime.now()
+                time_info = now.strftime("\U0001F552 Hora: %H:%M\nFecha: %A, \n%d de %B de %Y")
+                if self.label and self.root:
+                        self.label.config(
+                            text=time_info,
+                            font=(self.FONT_NORMAL)  
+                        )
+                self._update_label(time_info)
+                print("[DISPLAY] Mostrando hora y fecha")
 
     def showCalendar(self):
-        now = datetime.datetime.now()
-        cal = calendar.TextCalendar()
-        month_cal = "\U0001F4C5 Calendario\n" + cal.formatmonth(now.year, now.month)
-        self._update_label(month_cal)
-        print("[DISPLAY] Mostrando el calendario")
+        if(self.encendido):
+                now = datetime.datetime.now()
+                cal = calendar.TextCalendar()
+                month_cal = "\U0001F4C5 Calendario\n" + cal.formatmonth(now.year, now.month)
+                if self.label and self.root:
+                        self.label.config(
+                            text=month_cal,
+                            font=(self.FONT_NORMAL, 18)  
+                        )
+                self._update_label(month_cal)
+                print("[DISPLAY] Mostrando el calendario")
 
