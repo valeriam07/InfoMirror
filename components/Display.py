@@ -13,14 +13,17 @@
 
 
 import tkinter as tk
-from tkinter import messagebox
+import threading
 import datetime
 import calendar
 import requests
-import time
-import threading
 
 class Display:
+    BACKGROUND_COLOR = "#2c2c2c"  # gris oscuro
+    TEXT_COLOR = "#ffffff"        # blanco
+    FONT_FAMILY = "Arial"
+    FONT_NORMAL = (FONT_FAMILY, 18)
+    
     def __init__(self, parent):
         self.parent = parent
         self.root = None
@@ -28,7 +31,7 @@ class Display:
         self.running = False
 
     def turnOn(self):
-        if not self.running:  # evitar multiples hilos
+        if not self.running:
             self.running = True
             threading.Thread(target=self._start_gui, daemon=True).start()
             print("[DISPLAY] Encendiendo Display")
@@ -36,24 +39,32 @@ class Display:
     def _start_gui(self):
         self.root = tk.Tk()
         self.root.title("InfoMirror")
-        self.root.geometry("400x300")
+        self.root.geometry("1600x1200")
+        self.root.configure(bg=self.BACKGROUND_COLOR)
 
-        self.label = tk.Label(self.root, text="Bienvenid@ a InfoMirror", font=("Arial", 16))
-        self.label.pack(expand=True)
+        self.label = tk.Label(
+            self.root,
+            text="Bienvenid@ a InfoMirror \U0001FA9E\u2728",
+            font=(self.FONT_NORMAL, 40),
+            fg=self.TEXT_COLOR,
+            bg=self.BACKGROUND_COLOR,
+            justify="left",
+            anchor="w"
+        )
+        self.label.pack(expand=True, fill="both", padx=50, pady=50)
 
         self.root.protocol("WM_DELETE_WINDOW", self.turnOff)
         self.root.mainloop()
 
-        # Al cerrar el mainloop, limpiar estado
         self.running = False
         self.root = None
         self.label = None
 
     def turnOff(self):
         if self.root:
-            self.root.destroy()  # Rompe el mainloop y continua _start_gui()
+            self.root.destroy()
         print("[DISPLAY] Apagando Display")
-        
+
     def _update_label(self, text):
         if self.label and self.root:
             self.root.after(0, lambda: self.label.config(text=text))
@@ -66,7 +77,7 @@ class Display:
             response = requests.get(url)
             if response.status_code == 200:
                 data = response.json()["current_weather"]
-                return f"Temp: {data['temperature']}C\nViento: {data['windspeed']} km/h"
+                return f"\U0001F324\uFE0F Temp: {data['temperature']}C\n\U0001F343 Viento: {data['windspeed']} km/h"
             else:
                 return "No se pudo obtener el clima."
         except Exception as e:
@@ -79,13 +90,14 @@ class Display:
 
     def showTime(self):
         now = datetime.datetime.now()
-        time_info = now.strftime("Hora: %H:%M\nFecha: %A, %d de %B de %Y")
+        time_info = now.strftime("\U0001F552 Hora: %H:%M\nFecha: %A, %d de %B de %Y")
         self._update_label(time_info)
         print("[DISPLAY] Mostrando hora y fecha")
 
     def showCalendar(self):
         now = datetime.datetime.now()
         cal = calendar.TextCalendar()
-        month_cal = cal.formatmonth(now.year, now.month)
+        month_cal = "\U0001F4C5 Calendario\n" + cal.formatmonth(now.year, now.month)
         self._update_label(month_cal)
         print("[DISPLAY] Mostrando el calendario")
+

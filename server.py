@@ -50,11 +50,5 @@ def show_climate():
     print("Mostrar clima")
     return "Mostrar clima"
 
-@app.route("/adjust_brightness/<int:value>")
-def adjust_brightness(value):
-    mirror.manage_leds_request(3, value)
-    print(f"Ajustando brillo al {value}%.")
-    return f"Brillo ajustado al {value}%."
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=4000)

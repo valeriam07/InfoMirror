@@ -10,17 +10,23 @@
 # - Regulacion de la intensidad (desde la aplicacion o potenciometro)
 # ---------------------------------------------------------------
 
+import gpiod
 
-class LEDController():
-	def __init__(self, parent):
-		self.parent = parent
-		self.leds = 0
-		
-	def turnOn(self):
-		print("[LEDS] Encender luces")
-		
-	def turnOff(self):
-		print("[LEDS] Apagar luces")
-		
-	def setBrightness(self, brightness):
-		print(f"[LEDS] Cambiar brillo a {brightness}")
+class LEDController:
+    def __init__(self, parent, led_pin=27, chip_name="gpiochip4"):
+        self.parent = parent
+        self.chip = gpiod.Chip(chip_name)
+        self.led_line = self.chip.get_line(led_pin)
+        self.led_line.request(consumer="led", type=gpiod.LINE_REQ_DIR_OUT)
+
+    def turnOn(self):
+        print("[LEDS] Encender luces")
+        self.led_line.set_value(1)
+        self.leds = 1
+
+    def turnOff(self):
+        print("[LEDS] Apagar luces")
+        self.led_line.set_value(0)
+        self.leds = 0
+
+
