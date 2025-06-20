@@ -22,7 +22,7 @@ class InfoMirror:
         self.led_controller = LEDController.LEDController(parent = self) # Control de LEDs
         self.manual_led_override = False # Control de luces por medio de la app
         self.manual_display_override = False # Control del display por medio de la app
-        self.display.turnOn()
+        self.display.turnOn() 
 
     def start_motion_sensor(self):
         self.motion_sensor.if_motion_detected()
@@ -30,13 +30,14 @@ class InfoMirror:
     def stop_motion_sensor(self):
         self.motion_sensor.stop()
         
-    def manage_leds_request(self, request, brightness):
+    def manage_leds_request(self, request):
         match request:
                 case 1: # Encender LEDs
                         self.manual_led_override = False
                         responde = self.led_controller.turnOn()
                 case 2: # Apagar LEDs
                         self.manual_led_override = True 
+                        print("ENTRA")
                         response = self.led_controller.turnOff()
         return response
 
@@ -56,9 +57,7 @@ class InfoMirror:
                         response = self.display.showCalendar() 
         return response
  
-# mirror = InfoMirror()
-# #mirror.start_motion_sensor()  
-# mirror.manage_display_request()
+
 
 
 	

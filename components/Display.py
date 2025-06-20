@@ -77,7 +77,7 @@ class Display:
             print("[WARNING] Pantalla apagada. Enciende primero con `turnOn()`.")
 
     def get_weather(self):
-        url = "https://api.open-meteo.com/v1/forecast?latitude=-34.61&longitude=-58.38&current_weather=true"
+        url = "https://api.open-meteo.com/v1/forecast?latitude=9.93&longitude=-84.08&current_weather=true"
         try:
             response = requests.get(url)
             if response.status_code == 200:

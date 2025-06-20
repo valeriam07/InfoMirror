@@ -32,7 +32,7 @@ class MotionSensor:
                         self.parent.led_controller.turnOn()
                         if not self.parent.manual_display_override:
                                 self.parent.display.turnOn()
-                        time.sleep(20) # Esperar 20s antes de leer otra vez
+                        time.sleep(15) # Esperar 20s antes de leer otra vez
                 else:
                     self.parent.led_controller.turnOff()
                     self.parent.display.turnOff()

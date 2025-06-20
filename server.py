@@ -12,12 +12,12 @@ def home():
 
 @app.route("/turn_on_leds")
 def turn_on_leds():
-    mirror.manage_leds_request(1, 100)
+    mirror.manage_leds_request(1)
     return "LEDs encendidos."
 
 @app.route("/turn_off_leds")
 def turn_off_leds():
-    mirror.manage_leds_request(2, 0)
+    mirror.manage_leds_request(2)
     return "LEDs apagados."
 
 @app.route("/turn_on_screen")
